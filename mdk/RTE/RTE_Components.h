@@ -3,7 +3,7 @@
  * Auto generated Run-Time-Environment Component Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'test_00_build_and_load' 
+ * Project: 'c_01_led' 
  * Target:  'Target 1' 
  */
 
