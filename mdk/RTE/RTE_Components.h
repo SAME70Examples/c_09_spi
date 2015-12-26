@@ -3,7 +3,7 @@
  * Auto generated Run-Time-Environment Component Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'c_01_led' 
+ * Project: 'c_02_button' 
  * Target:  'Target 1' 
  */
 
