@@ -6,15 +6,20 @@ void led_init(void);
 void led_setState(int led_state);
 void delay_ms(int time_ms);
 void delay_us(int time_us);
+void button_init(void);
+int button_isPressed(void);
 
 int main(){
 	SystemCoreClockUpdate();
 	led_init();
+	button_init();
+
 	while(1){
-		led_setState(LED_ON);
-		delay_ms(500);
-		led_setState(LED_OFF);
-		delay_ms(500);
+		if(button_isPressed()){
+			led_setState(LED_ON);
+		}else{
+			led_setState(LED_OFF);
+		}
 	}
 }
 
@@ -54,4 +59,19 @@ void delay_us(int time_us){
 	unsigned int total_time  = time_us * (SystemCoreClock /(1000000 * DELAY_SCALE_FACTOR_US));
 	for(unsigned int i = 0; i< total_time; i++){
 	}
+}
+
+/**
+ * Configure PA11 as input with pull-ups
+ */
+void button_init(void){
+	PMC->PMC_PCR = (PMC_PCR_EN)|(PMC_PCR_CMD_WRITE)|(PMC_PCR_PID_PIOA);//Enable PIOA Peripheral
+	PIOA->PIO_PER = PIO_PER_P11;//Enable direct control of PA11
+	PIOA->PIO_PUER = PIO_PUER_P11;//Enable pull ups
+	PIOA->PIO_PPDDR = PIO_PPDDR_P11;//Disable pull downs
+	PIOA->PIO_ODR = PIO_ODR_P11;//Configure as input
+}
+
+int button_isPressed(void){
+	return ((PIOA->PIO_PDSR) & (PIO_PDSR_P11)) ? 0 : 1;//Return pin status
 }
