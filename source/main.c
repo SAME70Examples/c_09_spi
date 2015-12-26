@@ -15,11 +15,7 @@ int main(){
 	button_init();
 
 	while(1){
-		if(button_isPressed()){
-			led_setState(LED_ON);
-		}else{
-			led_setState(LED_OFF);
-		}
+		//TODO
 	}
 }
 
@@ -70,8 +66,24 @@ void button_init(void){
 	PIOA->PIO_PUER = PIO_PUER_P11;//Enable pull ups
 	PIOA->PIO_PPDDR = PIO_PPDDR_P11;//Disable pull downs
 	PIOA->PIO_ODR = PIO_ODR_P11;//Configure as input
+	PIOA->PIO_ESR = PIO_ESR_P11;//The interrupt source is an edge-detection event
+	PIOA->PIO_AIMDR = PIO_AIMDR_P11;//Both edge detection
+	PIOA->PIO_IER = PIO_IER_P11;//Enable interrupt on pin
+	
+	NVIC_EnableIRQ(PIOA_IRQn);//Enable interrup in listening in NVIC
 }
 
 int button_isPressed(void){
 	return ((PIOA->PIO_PDSR) & (PIO_PDSR_P11)) ? 0 : 1;//Return pin status
+}
+
+void PIOA_Handler(void){
+	uint32_t asserted_pins = PIOA->PIO_ISR;//Read all interrupts(all bits are clared after read)
+	if(asserted_pins & PIO_ISR_P11){//If interrupt on pin 11
+		if(button_isPressed()){
+			led_setState(LED_ON);
+		}else{
+			led_setState(LED_OFF);
+		}
+	}
 }
