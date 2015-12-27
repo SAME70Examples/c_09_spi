@@ -3,7 +3,7 @@
  * Auto generated Run-Time-Environment Component Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'c_03_interrupt' 
+ * Project: 'c_04_usart_polling' 
  * Target:  'Target 1' 
  */
 
