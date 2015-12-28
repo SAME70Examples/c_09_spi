@@ -3,6 +3,7 @@
 #include "delay.h"
 #include "usart_same70.h"
 #include "watchdogs.h"
+#include "serial_stdio.h"
 #include <stdlib.h>
 
 int rx_not_complete = 1;
@@ -15,6 +16,17 @@ void tx_callback(void){
 	tx_not_complete = 0;
 }
 
+void simple_puts(const char* pData){
+	tx_not_complete = 1;
+	usart1_async_puts(pData,tx_callback);
+	while(tx_not_complete);
+}
+
+void simple_gets(char* pData){
+	rx_not_complete = 1;
+	usart1_async_gets(pData, rx_callback);
+	while(rx_not_complete);
+}
 
 int main(){
 	SystemCoreClockUpdate();
@@ -24,21 +36,11 @@ int main(){
 	led_init();
 
 	char myBuffer[80];
-	tx_not_complete = 1;
-	usart1_async_puts("El dinero es dinero\n",tx_callback);
-	while(tx_not_complete);
+
+	simple_puts("El dinero es dinero\n");
 
 	while(1){
-		rx_not_complete = 1;
-		usart1_async_gets(myBuffer, rx_callback);
-		while(rx_not_complete);
-
-		tx_not_complete = 1;
-		usart1_async_puts(myBuffer,tx_callback);
-		while(tx_not_complete);
-
-		tx_not_complete = 1;
-		usart1_async_puts("\n",tx_callback);
-		while(tx_not_complete);
+		simple_gets(myBuffer);
+		serial_printf(simple_puts,">>%s\n",myBuffer);
 	}
 }
