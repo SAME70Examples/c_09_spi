@@ -1,0 +1,13 @@
+#ifndef _EXTRA_DEFINES_SAME70_H
+#define _EXTRA_DEFINES_SAME70_H
+
+#define PMC_PCR_CMD_READ (0<<12)
+#define PMC_PCR_CMD_WRITE (1<<12)
+#define PMC_PCR_PID_PIOA (10)
+#define PMC_PCR_PID_PIOB (11)
+#define PMC_PCR_PID_PIOC (12)
+#define PMC_PCR_PID_USART0 (13)
+#define PMC_PCR_PID_USART1 (14)
+#define PMC_PCR_PID_USART2 (15)
+
+#endif// _EXTRA_DEFINES_SAME70_H

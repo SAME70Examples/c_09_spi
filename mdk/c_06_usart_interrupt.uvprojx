@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -412,6 +412,21 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\board.c</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\delay.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart_same70.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\usart_same70.c</FilePath>
             </File>
           </Files>
         </Group>
