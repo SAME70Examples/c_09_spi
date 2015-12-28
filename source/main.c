@@ -12,11 +12,11 @@ int main(){
 	led_init();
 
 	char myBuffer[80];
-	usart1_iterrupt_blocking_puts("El dinero es dinero\n");
+	usart1_interrupt_blocking_puts("El dinero es dinero\n");
 	while(1){
-			usart1_iterrupt_blocking_gets(myBuffer);
-			usart1_iterrupt_blocking_puts(myBuffer);
-			usart1_iterrupt_blocking_puts("\n");
+			usart1_interrupt_blocking_gets(myBuffer);
+			usart1_interrupt_blocking_puts(myBuffer);
+			usart1_interrupt_blocking_puts("\n");
 	}
 }
 

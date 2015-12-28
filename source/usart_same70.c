@@ -58,7 +58,7 @@ int usart1_transmissionDone = 0;
 const char *  pTxData;
 int txData_size = 0;
 int txData_index = 0;
-void usart1_iterrupt_blocking_puts(const char* pString){
+void usart1_interrupt_blocking_puts(const char* pString){
 	if(pString[0] != '\0'){
 		usart1_startTransmission = 1;
 		txData_index = 0;
@@ -72,7 +72,7 @@ int usart1_receptionComplete = 1;
 char* usart1_rx_buffer;
 int usart1_rx_data_counter = 0;
 
-int usart1_iterrupt_blocking_gets(char* pString){
+int usart1_interrupt_blocking_gets(char* pString){
 	usart1_rx_data_counter = 0;
 	usart1_rx_buffer = pString;
 	usart1_receptionComplete = 0;

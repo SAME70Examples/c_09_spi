@@ -4,8 +4,8 @@
 void usart1_init(int baudrate);
 void usart1_putc(char c);
 char usart1_getc(void);
-void usart1_iterrupt_blocking_puts(const char* pString);
+void usart1_interrupt_blocking_puts(const char* pString);
 void usart1_puts(const char* pString);
-int usart1_iterrupt_blocking_gets(char* pString);
+int usart1_interrupt_blocking_gets(char* pString);
 
 #endif// _USART_SAME70_H
