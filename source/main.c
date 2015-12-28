@@ -12,6 +12,8 @@ int button_isPressed(void);
 void usart1_init(int baudrate);
 void usart1_putc(char c);
 char usart1_getc(void);
+void usart1_iterrupt_blocking_puts(const char* pString);
+void usart1_puts(const char* pString);
 
 int main(){
 	SystemCoreClockUpdate();
@@ -22,6 +24,7 @@ int main(){
 	while(1){
 		if(button_isPressed()){
 			led_setState(LED_ON);
+			usart1_iterrupt_blocking_puts("El dinero es dinero\n");
 		}else{
 			led_setState(LED_OFF);
 		}
@@ -62,6 +65,8 @@ void usart1_init(int baudrate){
 	| US_MR_CHRL_8_BIT | US_MR_PAR_NO);
 	USART1->US_BRGR = (4<<16)|(987<<0);//(fractional divider)|(integer dividier) 9600bps@150Mhz peripheral clock 
 	USART1->US_CR = US_CR_RXEN | US_CR_TXEN;//Enable receiver and transmitter
+	
+	NVIC_EnableIRQ(USART1_IRQn);//Enble interrup reception from NVIC
 }
 
 void usart1_putc(char c){
@@ -72,6 +77,45 @@ void usart1_putc(char c){
 char usart1_getc(void){
 	while(!(USART1->US_CSR & US_CSR_RXRDY));
 	return USART1->US_RHR;
+}
+
+void usart1_puts(const char* pString){
+	char c;
+	int index = 0;
+	c = pString[index];
+	
+	while(c != '\0'){
+		usart1_putc(c);
+		index++;
+		c = pString[index];
+	}
+}
+
+int usart1_startTransmission = 0;
+int usart1_transmissionDone = 0;
+const char *  pTxData;
+int txData_size = 0;
+int txData_index = 0;
+void usart1_iterrupt_blocking_puts(const char* pString){
+	if(pString[0] != '\0'){
+		usart1_startTransmission = 1;
+		txData_index = 0;
+		pTxData = pString;
+		USART1->US_IER = US_IER_TXRDY;
+		while(usart1_startTransmission);
+	}
+}
+
+void USART1_Handler(void){
+	uint32_t usart1_status = USART1->US_CSR;
+	if((usart1_status & US_CSR_TXRDY) && usart1_startTransmission){
+		USART1->US_THR = pTxData[txData_index];
+		txData_index++;
+		if(pTxData[txData_index] == '\0'){
+			USART1->US_IDR = US_IDR_TXRDY;
+			usart1_startTransmission = 0;
+		}
+	}
 }
 
 void delay_ms(int time_ms){
