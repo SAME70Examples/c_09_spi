@@ -53,50 +53,53 @@ void usart1_puts(const char* pString){
 	}
 }
 
-int usart1_startTransmission = 0;
-int usart1_transmissionDone = 0;
-const char *  pTxData;
-int txData_size = 0;
-int txData_index = 0;
-void usart1_interrupt_blocking_puts(const char* pString){
+volatile int usart1_tx_complete = 1;
+volatile const char *  pTxData;
+volatile int usart1_tx_data_size = 0;
+volatile int txData_index = 0;
+void (*usart1_tx_complete_callback)(void);
+
+void usart1_async_puts(const char* pString, void (*tx_complete_callback)(void)){
 	if(pString[0] != '\0'){
-		usart1_startTransmission = 1;
+		usart1_tx_complete = 0;
 		txData_index = 0;
 		pTxData = pString;
+		usart1_tx_complete_callback = tx_complete_callback;
 		USART1->US_IER = US_IER_TXRDY;
-		while(usart1_startTransmission);
 	}
 }
 
-int usart1_receptionComplete = 1;
-char* usart1_rx_buffer;
-int usart1_rx_data_counter = 0;
+volatile int usart1_rx_complete = 1;
+volatile char* usart1_rx_buffer;
+volatile int usart1_rx_data_counter = 0;
+void (*usart1_rx_complete_callback)(int);
 
-int usart1_interrupt_blocking_gets(char* pString){
+void usart1_async_gets(char* pString, void (*rx_complete_callback)(int)){
 	usart1_rx_data_counter = 0;
 	usart1_rx_buffer = pString;
-	usart1_receptionComplete = 0;
+	usart1_rx_complete_callback = rx_complete_callback;
+	usart1_rx_complete = 0;
 	USART1->US_IER = US_IER_RXRDY;//Enable Rx interrupt
-	while(!usart1_receptionComplete);
-	return usart1_rx_data_counter;
 }
 
 void USART1_Handler(void){
 	uint32_t usart1_status = USART1->US_CSR;
-	if((usart1_status & US_CSR_TXRDY) && usart1_startTransmission){
+	if((usart1_status & US_CSR_TXRDY) && (usart1_tx_complete == 0)){
 		USART1->US_THR = pTxData[txData_index];
 		txData_index++;
 		if(pTxData[txData_index] == '\0'){
 			USART1->US_IDR = US_IDR_TXRDY;
-			usart1_startTransmission = 0;
+			usart1_tx_complete = 1;
+			usart1_tx_complete_callback();
 		}
 	}
-	if((usart1_status & US_CSR_RXRDY) && (usart1_receptionComplete == 0)){
+	if((usart1_status & US_CSR_RXRDY) && (usart1_rx_complete == 0)){
 		char rx_new_data = USART1->US_RHR;
 		if(rx_new_data == '\r'){
 			usart1_rx_buffer[usart1_rx_data_counter] = '\0';//append string termination
 			USART1->US_IDR = US_IDR_RXRDY;//Disable rx irq
-			usart1_receptionComplete = 1;
+			usart1_rx_complete = 1;
+			usart1_rx_complete_callback(usart1_rx_data_counter);
 		}else{
 			usart1_rx_buffer[usart1_rx_data_counter] = rx_new_data;
 			usart1_rx_data_counter++;

@@ -4,8 +4,8 @@
 void usart1_init(int baudrate);
 void usart1_putc(char c);
 char usart1_getc(void);
-void usart1_interrupt_blocking_puts(const char* pString);
 void usart1_puts(const char* pString);
-int usart1_interrupt_blocking_gets(char* pString);
+void usart1_async_puts(const char* pString, void (*tx_complete_callback)(void));
+void usart1_async_gets(char* pString, void (*usart1_rx_complete_callback)(int));
 
 #endif// _USART_SAME70_H

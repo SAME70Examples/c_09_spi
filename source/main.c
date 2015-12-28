@@ -3,6 +3,18 @@
 #include "delay.h"
 #include "usart_same70.h"
 #include "watchdogs.h"
+#include <stdlib.h>
+
+int rx_not_complete = 1;
+void rx_callback(int nCharRead){
+	rx_not_complete = 0;
+}
+
+int tx_not_complete = 1;
+void tx_callback(void){
+	tx_not_complete = 0;
+}
+
 
 int main(){
 	SystemCoreClockUpdate();
@@ -12,11 +24,21 @@ int main(){
 	led_init();
 
 	char myBuffer[80];
-	usart1_interrupt_blocking_puts("El dinero es dinero\n");
+	tx_not_complete = 1;
+	usart1_async_puts("El dinero es dinero\n",tx_callback);
+	while(tx_not_complete);
+
 	while(1){
-			usart1_interrupt_blocking_gets(myBuffer);
-			usart1_interrupt_blocking_puts(myBuffer);
-			usart1_interrupt_blocking_puts("\n");
+		rx_not_complete = 1;
+		usart1_async_gets(myBuffer, rx_callback);
+		while(rx_not_complete);
+
+		tx_not_complete = 1;
+		usart1_async_puts(myBuffer,tx_callback);
+		while(tx_not_complete);
+
+		tx_not_complete = 1;
+		usart1_async_puts("\n",tx_callback);
+		while(tx_not_complete);
 	}
 }
-
