@@ -36,11 +36,13 @@ int main(){
 	led_init();
 
 	char myBuffer[80];
+	int lineCounter = 1;
 
 	simple_puts("El dinero es dinero\n");
-
+	
 	while(1){
 		simple_gets(myBuffer);
-		serial_printf(simple_puts,">>%s\n",myBuffer);
+		serial_printf(simple_puts,"%d$%s\n",lineCounter,myBuffer);
+		lineCounter++;
 	}
 }
