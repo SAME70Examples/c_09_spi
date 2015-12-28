@@ -68,6 +68,19 @@ void usart1_iterrupt_blocking_puts(const char* pString){
 	}
 }
 
+int usart1_receptionComplete = 1;
+char* usart1_rx_buffer;
+int usart1_rx_data_counter = 0;
+
+int usart1_iterrupt_blocking_gets(char* pString){
+	usart1_rx_data_counter = 0;
+	usart1_rx_buffer = pString;
+	usart1_receptionComplete = 0;
+	USART1->US_IER = US_IER_RXRDY;//Enable Rx interrupt
+	while(!usart1_receptionComplete);
+	return usart1_rx_data_counter;
+}
+
 void USART1_Handler(void){
 	uint32_t usart1_status = USART1->US_CSR;
 	if((usart1_status & US_CSR_TXRDY) && usart1_startTransmission){
@@ -76,6 +89,17 @@ void USART1_Handler(void){
 		if(pTxData[txData_index] == '\0'){
 			USART1->US_IDR = US_IDR_TXRDY;
 			usart1_startTransmission = 0;
+		}
+	}
+	if((usart1_status & US_CSR_RXRDY) && (usart1_receptionComplete == 0)){
+		char rx_new_data = USART1->US_RHR;
+		if(rx_new_data == '\r'){
+			usart1_rx_buffer[usart1_rx_data_counter] = '\0';//append string termination
+			USART1->US_IDR = US_IDR_RXRDY;//Disable rx irq
+			usart1_receptionComplete = 1;
+		}else{
+			usart1_rx_buffer[usart1_rx_data_counter] = rx_new_data;
+			usart1_rx_data_counter++;
 		}
 	}
 }
