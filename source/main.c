@@ -2,21 +2,11 @@
 #include "board.h"
 #include "delay.h"
 #include "usart_same70.h"
-
-void disable_wdt(void){
-	WDT->WDT_CR = WDT_CR_KEY_PASSWD;
-	WDT->WDT_MR = WDT_MR_WDDIS;
-}
-
-void disable_rswdt(void){
-	RSWDT->RSWDT_CR = RSWDT_CR_KEY_PASSWD;
-	RSWDT->RSWDT_MR = RSWDT_MR_WDDIS | RSWDT_MR_ALLONES_Msk;
-}
+#include "watchdogs.h"
 
 int main(){
 	SystemCoreClockUpdate();
-	disable_wdt();
-	disable_rswdt();
+	watchdogs_disable_all();
 	usart1_init(9600);
 	button_init();
 	led_init();
