@@ -1,15 +1,14 @@
 #include "serial_stdio.h"
 
 void serial_puts(void (*p_putc)(char), const char * pString){
-	char newChar;
-	int i ;
-	for(i = 0 ; i < 81; i++){
-		newChar = pString[i];
-		if( newChar != '\0' ){
-			p_putc(newChar);
-		}else{
-			break;
-		}
+	char next_char;
+	int index = 0;
+	next_char = pString[index];
+
+	while(next_char != '\0'){
+		p_putc(next_char);
+		index++;
+		next_char = pString[index];
 	}
 }
 
