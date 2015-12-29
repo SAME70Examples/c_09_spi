@@ -2,9 +2,9 @@
 #include "board.h"
 #include "delay.h"
 #include "watchdogs.h"
-#include "serial_stdio.h"
 #include "cmsis_os.h"                   // ARM::CMSIS:RTOS:Keil RTX
 #include "os_usart_same70.h"
+#include "os_serial_stdio.h"
 
 /*----------------------------------------------------------------------------
  *      Thread 1 'Thread_Name': Led blinker
@@ -78,7 +78,7 @@ void Thread3(void const *argument) {
 	thread2_reset_counter = 1;
 	osDelay(1);
 	while(1){
-		serial_printf(os_usart1_puts,"count = %d\n",thread2_counter);
+		os_serial_printf(os_usart1_puts,"count = %d\n",thread2_counter);
 		thread2_reset_counter = 1;
 		osDelay(1000);
 	}
@@ -94,6 +94,7 @@ int main(){
 	os_usart1_init(9600);
 	button_init();
 	led_init();
+	os_serial_init();
 	//Initialize os objects
 	Thread1_init();
 	Thread2_init();
@@ -108,7 +109,7 @@ int main(){
 
 	while(1){
 		os_usart1_gets(myBuffer);
-		serial_printf(os_usart1_puts,">>%s\n",myBuffer);
+		os_serial_printf(os_usart1_puts,">>%s\n",myBuffer);
 		lineCounter++;
 	}
 }

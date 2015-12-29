@@ -269,8 +269,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\source\serial_stdio.c</PathWithFileName>
-      <FilenameWithoutPath>serial_stdio.c</FilenameWithoutPath>
+      <PathWithFileName>..\source\os_usart_same70.c</PathWithFileName>
+      <FilenameWithoutPath>os_usart_same70.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -282,8 +282,21 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\source\os_usart_same70.c</PathWithFileName>
-      <FilenameWithoutPath>os_usart_same70.c</FilenameWithoutPath>
+      <PathWithFileName>..\source\os_serial_stdio.c</PathWithFileName>
+      <FilenameWithoutPath>os_serial_stdio.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>8</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\source\safe_stdlib.c</PathWithFileName>
+      <FilenameWithoutPath>safe_stdlib.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -291,7 +304,7 @@
 
   <Group>
     <GroupName>::CMSIS</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>1</RteFlg>

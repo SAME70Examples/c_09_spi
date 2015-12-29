@@ -434,14 +434,19 @@
               <FilePath>..\source\watchdogs.c</FilePath>
             </File>
             <File>
-              <FileName>serial_stdio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\source\serial_stdio.c</FilePath>
-            </File>
-            <File>
               <FileName>os_usart_same70.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\source\os_usart_same70.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_serial_stdio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\os_serial_stdio.c</FilePath>
+            </File>
+            <File>
+              <FileName>safe_stdlib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\source\safe_stdlib.c</FilePath>
             </File>
           </Files>
         </Group>
